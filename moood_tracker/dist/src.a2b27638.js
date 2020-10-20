@@ -89144,9 +89144,10 @@ const AppDiv = _styledComponents.default.div`
 `;
 
 const Main = ({}) => {
-  const [amISad, setAmISad] = (0, _react.useState)(false);
-  const [amIPee, setAmIPee] = (0, _react.useState)(false);
-  const [counting, setCounting] = (0, _react.useState)(0);
+  // const [amISad, setAmISad] = useState(false);
+  // const [amIPee, setAmIPee] = useState(false);
+  const [counting, setCounting] = (0, _react.useState)([]);
+  const [newDay, setNewDay] = (0, _react.useState)([0, 0, 0, 0, 0]);
 
   function new_day() {
     db.collection("tracking").doc("BRCSBynUaUd5hNRdbxoinsT65562").collection("activities").add({
@@ -89157,50 +89158,69 @@ const Main = ({}) => {
       games: 0,
       other: 0
     });
-    console.log("peepeepoopoo");
-  }
+  } // useEffect(() => {
+  //   console.log("Sadness changed!");
+  // }, [amISad]);
+
 
   (0, _react.useEffect)(() => {
-    console.log("Sadness changed!");
-  }, [amISad]);
-  db.collection("tracking").doc("BRCSBynUaUd5hNRdbxoinsT65562").collection("activities").get().then(function (querySnapshot) {
-    let count = 0;
-    querySnapshot.forEach(function (doc) {
-      // doc.data() is never undefined for query doc snapshots
-      console.log(doc.id, " => ", doc.data());
-      count++;
+    console.log("Use Effect was called");
+    db.collection("tracking").doc("BRCSBynUaUd5hNRdbxoinsT65562").collection("activities").onSnapshot(querySnapshot => {
+      console.log("Snapshot was called");
+      let news = [];
+      querySnapshot.forEach(function (doc) {
+        news.push(doc.data());
+      });
+      setCounting(news);
     });
-    setCounting(count);
-  }).catch(function (error) {
-    console.log("Error getting documents: ", error);
-  });
-  return /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("div", null, "Am I sad? --> ", amISad ? "Yes" : "No"), /*#__PURE__*/_react.default.createElement("div", null, "Am I pee? --> ", amIPee ? "Yes" : "No"), /*#__PURE__*/_react.default.createElement("div", null, "Number of days logged --> ", counting), /*#__PURE__*/_react.default.createElement("button", {
-    onClick: () => setAmISad(!amISad)
-  }, "Sadness"), /*#__PURE__*/_react.default.createElement("button", {
-    onClick: () => setAmIPee(!amIPee)
-  }, "Peeness"), /*#__PURE__*/_react.default.createElement("button", {
+  }, []); // db.collection("tracking").doc("BRCSBynUaUd5hNRdbxoinsT65562").collection("activities").get()
+  //   .then(function(querySnapshot) {
+  //       let count = 0;
+  //       querySnapshot.forEach(function(doc) {
+  //           // doc.data() is never undefined for query doc snapshots
+  //           // console.log(doc.id, " => ", doc.data());
+  //           count++;
+  //       });
+  //       setCounting(count);
+  //   })
+  //   .catch(function(error) {
+  //       console.log("Error getting documents: ", error);
+  //   });
+
+  return /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("label", {
+    for: "games"
+  }, "Games:"), /*#__PURE__*/_react.default.createElement("input", {
+    type: "text",
+    id: "games",
+    name: "games"
+  }), /*#__PURE__*/_react.default.createElement("br", null), /*#__PURE__*/_react.default.createElement("label", {
+    for: "programming"
+  }, "Programming:"), /*#__PURE__*/_react.default.createElement("input", {
+    type: "text",
+    id: "programming",
+    name: "programming"
+  }), " ", /*#__PURE__*/_react.default.createElement("br", null), /*#__PURE__*/_react.default.createElement("label", {
+    for: "school"
+  }, "School:"), /*#__PURE__*/_react.default.createElement("input", {
+    type: "school",
+    id: "school",
+    name: "school"
+  }), /*#__PURE__*/_react.default.createElement("br", null), /*#__PURE__*/_react.default.createElement("label", {
+    for: "work"
+  }, "Work:"), /*#__PURE__*/_react.default.createElement("input", {
+    type: "work",
+    id: "work",
+    name: "work"
+  }), /*#__PURE__*/_react.default.createElement("br", null), /*#__PURE__*/_react.default.createElement("label", {
+    for: "other"
+  }, "Other:"), /*#__PURE__*/_react.default.createElement("input", {
+    type: "other",
+    id: "other",
+    name: "other"
+  }), /*#__PURE__*/_react.default.createElement("br", null), /*#__PURE__*/_react.default.createElement("button", {
     onClick: new_day
   }, "Make a Life"));
-}; // function App() {
-//   return (
-//     <div className="App">
-//       <header className="App-header">
-//         <img src={logo} className="App-logo" alt="logo" />
-//         <p>
-//           Edit <code>src/App.js</code>
-//         </p>
-//         <a
-//           className="App-link"
-//           href="https://reactjs.org"
-//           target="_blank"
-//           rel="noopener noreferrer"
-//         >
-//           Learn React
-//         </a>
-//       </header>
-//     </div>
-//   );
-// }
+};
 },{"react":"node_modules/react/index.js","styled-components":"node_modules/styled-components/dist/styled-components.browser.esm.js","react-router-dom":"node_modules/react-router-dom/esm/react-router-dom.js","./logo.svg":"src/logo.svg","./App.css":"src/App.css","firebase":"node_modules/firebase/dist/index.cjs.js","./auth.js":"src/auth.js"}],"src/serviceWorker.js":[function(require,module,exports) {
 "use strict";
 
@@ -89379,7 +89399,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "57569" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58417" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

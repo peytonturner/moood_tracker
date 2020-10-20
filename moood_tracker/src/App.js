@@ -42,9 +42,10 @@ const AppDiv = styled.div`
 
 const Main = ({}) => {
   
-  const [amISad, setAmISad] = useState(false);
-  const [amIPee, setAmIPee] = useState(false);
-  const [counting, setCounting] = useState(0);
+  // const [amISad, setAmISad] = useState(false);
+  // const [amIPee, setAmIPee] = useState(false);
+  const [counting, setCounting] = useState([]);
+  const [newDay, setNewDay] = useState([0, 0, 0, 0, 0]);
 
   function new_day() {
     db.collection("tracking").doc("BRCSBynUaUd5hNRdbxoinsT65562").collection("activities").add({
@@ -55,59 +56,60 @@ const Main = ({}) => {
       games: 0,
       other: 0
     });
-    console.log("peepeepoopoo");
   }
 
-  useEffect(() => {
-    console.log("Sadness changed!");
-  }, [amISad]);
+  // useEffect(() => {
+  //   console.log("Sadness changed!");
+  // }, [amISad]);
 
-  db.collection("tracking").doc("BRCSBynUaUd5hNRdbxoinsT65562").collection("activities").get()
-    .then(function(querySnapshot) {
-        let count = 0;
+  useEffect(() => {
+    console.log("Use Effect was called");
+    db.collection("tracking").doc("BRCSBynUaUd5hNRdbxoinsT65562").collection("activities")
+      .onSnapshot((querySnapshot) => { 
+        console.log("Snapshot was called");
+        let news = [];
         querySnapshot.forEach(function(doc) {
-            // doc.data() is never undefined for query doc snapshots
-            console.log(doc.id, " => ", doc.data());
-            count++;
+          news.push(doc.data());
         });
-        setCounting(count);
-    })
-    .catch(function(error) {
-        console.log("Error getting documents: ", error);
+        setCounting(news);
     });
+  }, []); 
+
+  // db.collection("tracking").doc("BRCSBynUaUd5hNRdbxoinsT65562").collection("activities").get()
+  //   .then(function(querySnapshot) {
+  //       let count = 0;
+  //       querySnapshot.forEach(function(doc) {
+  //           // doc.data() is never undefined for query doc snapshots
+  //           // console.log(doc.id, " => ", doc.data());
+  //           count++;
+  //       });
+  //       setCounting(count);
+  //   })
+  //   .catch(function(error) {
+  //       console.log("Error getting documents: ", error);
+  //   });
 
   return (
 
     <div>
-      <div>Am I sad? --> {(amISad) ? "Yes" : "No"}</div>
-      <div>Am I pee? --> {(amIPee) ? "Yes" : "No"}</div>
-      <div>Number of days logged --> {counting}</div>
-      <button onClick={() => setAmISad(!amISad)}>Sadness</button>
-      <button onClick={() => setAmIPee(!amIPee)}>Peeness</button>
+
+      <label for="games">Games:</label>
+      <input type="text" id="games" name="games"/><br />
+
+      <label for="programming">Programming:</label>
+      <input type="text" id="programming" name="programming"/> <br />
+
+      <label for="school">School:</label>
+      <input type="school" id="school" name="school"/><br />
+
+      <label for="work">Work:</label>
+      <input type="work" id="work" name="work"/><br />
+      
+      <label for="other">Other:</label>
+      <input type="other" id="other" name="other"/><br />
+
       <button onClick={new_day}>Make a Life</button>
-      {/* <button onClick={doc_count}>Count Docs</button> */}
     </div>
 
   );
 }
-
-// function App() {
-//   return (
-//     <div className="App">
-//       <header className="App-header">
-//         <img src={logo} className="App-logo" alt="logo" />
-//         <p>
-//           Edit <code>src/App.js</code>
-//         </p>
-//         <a
-//           className="App-link"
-//           href="https://reactjs.org"
-//           target="_blank"
-//           rel="noopener noreferrer"
-//         >
-//           Learn React
-//         </a>
-//       </header>
-//     </div>
-//   );
-// }
